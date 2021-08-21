@@ -1,7 +1,7 @@
+from . import util
+
 from django.shortcuts import render
 from django import forms
-
-from . import util
 
 
 class NewForm(forms.Form):
@@ -23,7 +23,7 @@ def add(request):
         if form.is_valid():
             title = form.cleaned_data["title"]
             text = form.cleaned_data["text"]
-            save_entry(title, text)
+            util.save_entry(title, text)
         else:
             return render(request, "encyclopedia/add.html", {
                 "form":form
