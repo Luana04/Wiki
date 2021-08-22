@@ -14,8 +14,19 @@ def index(request):
         "entries": util.list_entries()
     })
 
-def page(request):
-    return render(request, "encyclopedia/page.html")
+def page(request, title):
+    try:
+        mdpage = util.get_entry(title)
+        htmlpage = md.convert(mdpage)
+        return render(request, "encyclopedia/entry.html", {
+            "title": title,
+            "content": htmlpage
+        })
+    except:
+        return render(request, "encyclopedia/error.html", {
+            "error": "Page not found!",
+            "title": "Error!"
+        })
 
 def add(request):
     if request.method == "POST":
