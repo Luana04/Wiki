@@ -12,6 +12,9 @@ class NewForm(forms.Form):
     title = forms.CharField(label="Title")
     text = forms.CharField(label="Text")
 
+class NewFormEdit(forms.Form):
+    text = forms.CharField(label="Text")
+
 
 class SearchResultsView(ListView):
     model = util.list_entries()
@@ -77,3 +80,18 @@ def random(request):
     juice = entries[randint(0, len(entries)-1)]
 
     return redirect("page", title=juice.capitalize())
+
+def edit(request, title):
+    if request.method == "POST":
+        form = NewFormEdit(request.POST)
+        if form.is_valid():
+            text = form.cleaned_data["text"]
+            util.save_entry(title, text)
+        else:
+            return render(request, "encyclopedia/edit.html", {
+                "form":form
+            })
+
+    return render(request, "encyclopedia/index.html", {
+        "form" : NewFormEdit()
+    }) 
